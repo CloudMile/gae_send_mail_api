@@ -1,0 +1,32 @@
+runtime: go
+api_version: go1
+
+env: standard
+threadsafe: false
+instance_class: F1
+handlers:
+  - url: "/favicon.ico"
+    static_files: static/favicon.png
+    upload: static/favicon.png
+
+  - url: "/robots.txt"
+    static_files: static/robots.txt
+    upload: static/robots.txt
+
+  - url: "/(.*\\.(gif|png|jpg))$"
+    application_readable: false
+    static_files: "static/\\1"
+    require_matching_file: false
+    upload: "static/.*\\.(gif|png|jpg)$"
+
+  - url: '/.*'
+    script: _go_app
+
+automatic_scaling:
+  min_idle_instances: automatic
+  max_idle_instances: automatic
+  min_pending_latency: automatic
+  max_pending_latency: automatic
+
+env_variables:
+  MAIL_SENDER: "<YOUR_GAE_MAIL_SENDER>"
