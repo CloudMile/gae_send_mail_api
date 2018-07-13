@@ -8,7 +8,7 @@ $ go get github.com/CloudMile/gae_send_mail_api
 
 ## Get mux
 ```sh
-% go get github.com/gorilla/mux
+$ go get github.com/gorilla/mux
 ```
 
 ## Enable GAE service
