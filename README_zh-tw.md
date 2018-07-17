@@ -113,7 +113,7 @@ multipart_data = MultipartEncoder(
 response = requests.post('https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send', data=multipart_data, headers={'Content-Type': multipart_data.content_type})
 ```
 
-## Ref
+## Refs
 
-[1] https://cloud.google.com/about/locations/?region=asia-pacific#region
-[2] https://cloud.google.com/appengine/docs/standard/go/mail/#who_can_send_mail
+- [1] https://cloud.google.com/about/locations/?region=asia-pacific#region
+- [2] https://cloud.google.com/appengine/docs/standard/go/mail/#who_can_send_mail
