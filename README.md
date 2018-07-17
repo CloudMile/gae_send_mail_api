@@ -1,34 +1,73 @@
-# API Server for Send Mail on GAE
-Sample API server for send mail on GAE
+# Mail Server on GAE
 
-## Get source code by go get
-```sh
-$ go get github.com/CloudMile/gae_send_mail_api
+## Abstract
+
+Because of GCE couldn't be a mail smtp server[1].
+For workaround, setup a mail server with API mode on GAE.
+
+## Setup GAE
+
+Create a new or use an exist project
+1. Choose App Engine.
+2. Choose language for development, we using `Go`.
+3. Choose deploy location[2].
+4. You can skip the tutorial.
+5. Refresh the page, and you can see the GAE main page.
+
+## Setup Sender
+On GAE → Settings → Email senders → ADD
+Note, there are some restrictions for sender
+
+- Project Owner
+- Make project ID to be a domain name; for example, the project is `hello-world-2018`
+  you can use `mail@hello-world-2018.appspotmail.com`, this mail DON'T need to add into Email senders
+- More info[3]
+
+
+## Get Mail Server Project Source Code
+
+Open Cloud Shell on GCP console
+check $GOPATH
+```shell
+$ echo $GOPATH
+/home/<GCP_UESR>/gopath:/google/gopath
 ```
 
-## Get mux
-```sh
-$ go get github.com/gorilla/mux
+if $GOPATH not exist, create a new one
+```shell
+$ mkdir -p ~/gopath
 ```
 
-## Enable GAE service
-[GCP console](https://console.cloud.google.com/)
-
-## Setup Config
-
-## How to Deploy
-Change your `from mail` into `main/app.yaml` and your service name (default is `mail`)
-```sh
-$ vim ./main/app.yaml
+get source code
+```shell
+$ go get -u github.com/CloudMile/gae_send_mail_api
 ```
-change `<YOUR_GAE_MAIL_SENDER>` you want
-change `mail` you want
 
-And then check this [url](https://cloud.google.com/appengine/docs/standard/python/getting-started/deploying-the-application) to learn how to deploy
+this is a warning, skip it
+```shell
+package github.com/CloudMile/gae_send_mail_api: no Go files in /home/<GCP_UESR>/gopath/src/github.com/CloudMile/gae_send_mail_api
+```
 
-## How to Use
-You need to using POST Form
-```sh
+get http controller lib
+```shell
+$ go get -u github.com/gorilla/mux
+```
+
+cd to project
+```shell
+$ cd ~/gopath/src/github.com/CloudMile/gae_send_mail_api/
+```
+
+deploy
+```shell
+$ make deploy PROJECT_ID='<YOUR_PROJECT_ID>' FROM='mail@<YOUR_PROJECT_ID>.appspotmail.com'
+```
+
+## Test or Use
+
+this project is a POST multipart/form-data server
+cURL
+```shell
 $ curl -X POST \
 -F "to=to.mail@mile.cloud" \
 -F "cc=cc1.mail@mile.cloud,cc2.mail@mile.cloud" \
@@ -36,5 +75,44 @@ $ curl -X POST \
 -F "subject=Send mail from GAE" \
 -F "data=@./favicon.png" \
 -F "body=upload file" \
-https://mail-dot-[YOUR_PROJECT_ID].appspot.com/send
+https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send
 ```
+
+ruby
+```ruby
+require 'rest_client'
+file = File.open('./favicon.png')
+params = {
+  to: 'to.mail@mile.cloud',
+  subject: 'Send Mail for Test',
+  body: 'TESTTESTTESTTESTTESTTESTTEST',
+  data: file
+}
+RestClient.post('https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send', params)
+```
+
+python
+```shell
+$ pip install requests-toolbelt
+```
+
+```python
+import requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
+multipart_data = MultipartEncoder(
+    fields={
+            # a file upload field
+            'data': ('favicon.png', open('favicon.png', 'rb'), 'text/plain'),
+            # plain text fields
+            'to': 'to.mail@mile.cloud',
+            'subject': 'Send Mail for Test',
+            'body': 'TESTTESTTESTTESTTESTTESTTEST',
+            }
+    )
+response = requests.post('https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send', data=multipart_data, headers={'Content-Type': multipart_data.content_type})
+```
+
+## Refs
+- [1] https://cloud.google.com/compute/docs/tutorials/sending-mail/
+- [2] https://cloud.google.com/about/locations/?region=asia-pacific#region
+- [3] https://cloud.google.com/appengine/docs/standard/go/mail/#who_can_send_mail
