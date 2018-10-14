@@ -7,6 +7,7 @@ import (
 	"google.golang.org/appengine"
 )
 
+// Router is router list
 func Router() (router *mux.Router) {
 	router = mux.NewRouter()
 	router.HandleFunc("/send", AddContext(Send)).Methods("POST")
@@ -14,6 +15,7 @@ func Router() (router *mux.Router) {
 	return
 }
 
+// AddContext is modify http.Request, cintext for need
 func AddContext(handleFunc func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := GetVars(r)
