@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"mime/multipart"
 	"net/http"
+	"os"
 
 	"github.com/CloudMile/gae_send_mail_api/model"
 	"google.golang.org/appengine/log"
@@ -12,6 +13,10 @@ import (
 
 // Send is the an endpoint "POST /send"
 func Send(w http.ResponseWriter, r *http.Request) {
+	if os.Getenv("CUSTOM_TOKEN") != "" && r.Header.Get("custom-token") != os.Getenv("CUSTOM_TOKEN") {
+		ErrorResponse(w, r, http.StatusNonAuthoritativeInfo, nil, "auth wrong")
+		return
+	}
 	ctx := r.Context()
 	w.Header().Set("Content-Type", "application/json")
 	log.Infof(ctx, "POST /send")

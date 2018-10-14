@@ -58,6 +58,13 @@ cd to project
 $ cd ~/gopath/src/github.com/CloudMile/gae_send_mail_api/
 ```
 
+set up app.yaml
+```shell
+$ vim main/app.yaml
+```
+you can set up CUSTOM_TOKEN for enable auth check
+if you enable, you need to add `curl -H 'Custom-Token: <YOUR_TOEKN>' `
+
 deploy
 ```shell
 $ make deploy PROJECT_ID='<YOUR_PROJECT_ID>' FROM='mail@<YOUR_PROJECT_ID>.appspotmail.com'
