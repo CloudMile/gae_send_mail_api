@@ -31,3 +31,6 @@ automatic_scaling:
 
 env_variables:
   MAIL_SENDER: "<YOUR_GAE_MAIL_SENDER>"
+  # you can set up CUSTOM_TOKEN for enable auth check
+  # if you enable, you need to add `curl -H 'Custom-Token: <YOUR_TOEKN>' `
+  # CUSTOM_TOKEN: "<>YOUR_TOEKN>"
