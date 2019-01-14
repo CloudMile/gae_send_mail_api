@@ -9,7 +9,7 @@ GCP 上的 GCE 不得作為 Smtp Mail Server 使用，必須串接 gsuite 或第
 
 ## 啟用 GAE
 
-建立新專案，或是使用既有的專案
+在 GCP 上建立新專案
 1. 選擇 App Engine
 2. 選擇程式語言，本文使用 Golang（其實選擇語言只會影響後面的 tutorial，如果打算略過 tutorial，選擇哪個都一樣）
 3. 選擇部署的位置，目前 GAE 沒有台灣的點，因此選擇日本[1]；一旦選好 region 後，之後所有的 services 都是在這個 region，無法修改；如果有更換 region 的需求，直接建立新專案

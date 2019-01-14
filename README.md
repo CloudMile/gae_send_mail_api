@@ -7,7 +7,7 @@ For workaround, setup a mail server with API mode on GAE.
 
 ## Setup GAE
 
-Create a new or use an exist project
+Create a new project on GCP
 1. Choose App Engine.
 2. Choose language for development, we using `Go`.
 3. Choose deploy location[2].
