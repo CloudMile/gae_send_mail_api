@@ -3,7 +3,7 @@ from_mail = $(FROM)
 version = $(shell date +"%y%m%d%H%M%S")
 ARCH=$(shell uname -s | grep Darwin)
 ifeq ($(ARCH),Darwin)
-	OPTS=-it
+	OPTS=-i "" -e
 else
 	OPTS=-i
 endif
