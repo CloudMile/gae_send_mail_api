@@ -1,9 +1,6 @@
-runtime: go
-api_version: go1
-service: mail
+runtime: go111
 
 env: standard
-threadsafe: false
 instance_class: F1
 handlers:
   - url: "/favicon.ico"
@@ -15,13 +12,12 @@ handlers:
     upload: static/robots.txt
 
   - url: "/(.*\\.(gif|png|jpg))$"
-    application_readable: false
     static_files: "static/\\1"
     require_matching_file: false
     upload: "static/.*\\.(gif|png|jpg)$"
 
   - url: '/.*'
-    script: _go_app
+    script: auto
 
 automatic_scaling:
   min_idle_instances: automatic

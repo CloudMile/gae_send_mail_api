@@ -21,6 +21,6 @@ deploy:
 	@echo 'Start to deploy'
 	@echo ''
 
-	sed $(OPTS) 's/<YOUR_GAE_MAIL_SENDER>/$(from_mail)/' ./main/app.yaml
-	gcloud app deploy -q --stop-previous-version --promote --project=$(project_id) --version=$(version) ./main/app.yaml
-	sed $(OPTS) 's/$(from_mail)/<YOUR_GAE_MAIL_SENDER>/' ./main/app.yaml
+	sed $(OPTS) 's/<YOUR_GAE_MAIL_SENDER>/$(from_mail)/' ./app.yaml
+	gcloud app deploy -q --stop-previous-version --promote --project=$(project_id) --version=$(version) ./app.yaml
+	sed $(OPTS) 's/$(from_mail)/<YOUR_GAE_MAIL_SENDER>/' ./app.yaml
