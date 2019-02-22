@@ -1,6 +1,8 @@
-require 'rest_client'
+require 'rest-client'
 
-file = File.open('./favicon.png')
+send_url = 'https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send'
+
+file = File.open('./static/favicon.png')
 
 params = {
   to: 'to.mail@mile.cloud',
@@ -9,4 +11,4 @@ params = {
   data: file
 }
 
-RestClient.post('https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send', params)
+RestClient.post(send_url, params)
