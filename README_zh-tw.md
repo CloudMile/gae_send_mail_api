@@ -66,9 +66,7 @@ $ make deploy PROJECT_ID='<YOUR_PROJECT_ID>' FROM='mail@<YOUR_PROJECT_ID>.appspo
 ```
 
 ## 測試與使用
-
-本專案使用 POST multipart/form-data 方式
-使用 cURL
+cURL with multipart/form-data
 ```shell
 $ curl -X POST \
 -F "to=to.mail@mile.cloud" \
@@ -77,7 +75,17 @@ $ curl -X POST \
 -F "subject=Send mail from GAE" \
 -F "data=@./favicon.png" \
 -F "body=upload file" \
-https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send
+"https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send"
+```
+
+cURL with application/x-www-form-urlencoded
+```shell
+$ curl -X POST -d 'to=to.mail@mile.cloud&subject=Send mail from GAE' "https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send"
+```
+
+cURL with application/json
+```shell
+$ curl -X POST -H 'Content-Type: application/json' -d '{"to": "to.mail@mile.cloud", "subject": "Send mail from GAE"}' "https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send"
 ```
 
 使用 ruby

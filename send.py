@@ -9,7 +9,7 @@ multipart_data = MultipartEncoder(
             'data': ('favicon.png', open('./static/favicon.png', 'rb'), 'text/plain'),
             # plain text fields
             'to': 'to.mail@mile.cloud',
-            'subject': 'Send Mail for Test',
+            'subject': 'Send Mail for Test from python',
             'body': 'TESTTESTTESTTESTTESTTESTTEST',
             }
     )
