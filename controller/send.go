@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -19,6 +18,7 @@ import (
 var HeaderContentType = map[string]map[string]bool{
 	"multipart/form-data":               {"pass": true, "isDataUpload": true},
 	"application/x-www-form-urlencoded": {"pass": true, "isDataUpload": false},
+	"application/json":                  {"pass": true, "isDataUpload": false},
 }
 
 // Send is the an endpoint "POST /send"
@@ -35,7 +35,7 @@ func Send(w http.ResponseWriter, r *http.Request) {
 
 	contentType, pass, isDataUpload := checkContentType(ctx, ct)
 	if !pass {
-		ErrorResponse(w, r, http.StatusNonAuthoritativeInfo, nil, "Content-Type error, shoud be multipart/form-data or application/x-www-form-urlencoded")
+		ErrorResponse(w, r, http.StatusNonAuthoritativeInfo, nil, "Content-Type error, shoud be multipart/form-data, application/x-www-form-urlencoded or application/json")
 		return
 	}
 	form := MakeMailParams(r, contentType)
@@ -109,8 +109,16 @@ func MakeMailParams(r *http.Request, contentType string) (form model.Form) {
 			Body:    r.FormValue("body"),
 		}
 	case "application/x-www-form-urlencoded":
-		body, _ := ioutil.ReadAll(r.Body)
-		json.Unmarshal(body, &form)
+		r.ParseForm()
+		form = model.Form{
+			To:      strings.Join(r.Form["to"], ","),
+			CC:      strings.Join(r.Form["cc"], ","),
+			BCC:     strings.Join(r.Form["bcc"], ","),
+			Subject: strings.Join(r.Form["subject"], ","),
+			Body:    strings.Join(r.Form["body"], ","),
+		}
+	case "application/json":
+		json.NewDecoder(r.Body).Decode(&form)
 	}
 	return
 }

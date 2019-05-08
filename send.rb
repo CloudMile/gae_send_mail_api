@@ -6,7 +6,7 @@ file = File.open('./static/favicon.png')
 
 params = {
   to: 'to.mail@mile.cloud',
-  subject: 'Send Mail for Test',
+  subject: 'Send Mail for Test from ruby',
   body: 'TESTTESTTESTTESTTESTTESTTEST',
   data: file
 }
