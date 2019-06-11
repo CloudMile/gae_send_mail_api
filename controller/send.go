@@ -38,7 +38,12 @@ func Send(w http.ResponseWriter, r *http.Request) {
 		ErrorResponse(w, r, http.StatusNonAuthoritativeInfo, nil, "Content-Type error, shoud be multipart/form-data, application/x-www-form-urlencoded or application/json")
 		return
 	}
-	form := MakeMailParams(r, contentType)
+	form, err := MakeMailParams(r, contentType)
+	if err != nil {
+		ErrorResponse(w, r, http.StatusUnprocessableEntity, err, "parse form params error")
+		return
+	}
+
 	log.Infof(ctx, "url values is %+v", form)
 
 	w.Header().Set("Content-Type", "application/json")
@@ -98,7 +103,7 @@ func MakeAttachments(r *http.Request, file multipart.File, header *multipart.Fil
 }
 
 // MakeMailParams is make mail params
-func MakeMailParams(r *http.Request, contentType string) (form model.Form) {
+func MakeMailParams(r *http.Request, contentType string) (form model.Form, err error) {
 	switch contentType {
 	case "multipart/form-data":
 		form = model.Form{
@@ -109,7 +114,7 @@ func MakeMailParams(r *http.Request, contentType string) (form model.Form) {
 			Body:    r.FormValue("body"),
 		}
 	case "application/x-www-form-urlencoded":
-		r.ParseForm()
+		err = r.ParseForm()
 		form = model.Form{
 			To:      strings.Join(r.Form["to"], ","),
 			CC:      strings.Join(r.Form["cc"], ","),
@@ -118,7 +123,7 @@ func MakeMailParams(r *http.Request, contentType string) (form model.Form) {
 			Body:    strings.Join(r.Form["body"], ","),
 		}
 	case "application/json":
-		json.NewDecoder(r.Body).Decode(&form)
+		err = json.NewDecoder(r.Body).Decode(&form)
 	}
 	return
 }
