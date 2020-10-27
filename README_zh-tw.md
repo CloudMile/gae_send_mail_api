@@ -75,17 +75,18 @@ $ curl -X POST \
 -F "subject=Send mail from GAE" \
 -F "data=@./favicon.png" \
 -F "body=upload file" \
-"https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send"
+"https://mail-dot-<YOUR_PROJECT_ID>.<REGION_ID>.r.appspot.com/send"
 ```
+其中 `<REGION_ID>` 是部屬的 GAE 所在的 region，可以參考[3]取得 App 的 region id。
 
 cURL with application/x-www-form-urlencoded
 ```shell
-$ curl -X POST -d 'to=to.mail@mile.cloud&subject=Send mail from GAE' "https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send"
+$ curl -X POST -d 'to=to.mail@mile.cloud&subject=Send mail from GAE' "https://mail-dot-<YOUR_PROJECT_ID>.<REGION_ID>.r.appspot.com/send"
 ```
 
 cURL with application/json
 ```shell
-$ curl -X POST -H 'Content-Type: application/json' -d '{"to": "to.mail@mile.cloud", "subject": "Send mail from GAE"}' "https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send"
+$ curl -X POST -H 'Content-Type: application/json' -d '{"to": "to.mail@mile.cloud", "subject": "Send mail from GAE"}' "https://mail-dot-<YOUR_PROJECT_ID>.<REGION_ID>.r.appspot.com/send"
 ```
 
 使用 ruby
@@ -95,7 +96,7 @@ $ gem install rest-client
 
 ```ruby
 require 'rest-client'
-send_url = 'https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send'
+send_url = 'https://mail-dot-<YOUR_PROJECT_ID>.<REGION_ID>.r.appspot.com/send'
 file = File.open('./static/favicon.png')
 params = {
   to: 'to.mail@mile.cloud',
@@ -115,7 +116,7 @@ $ pip install requests-toolbelt
 ```python
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-send_url = 'https://mail-dot-<YOUR_PROJECT_ID>.appspot.com/send'
+send_url = 'https://mail-dot-<YOUR_PROJECT_ID>.<REGION_ID>.r.appspot.com/send'
 multipart_data = MultipartEncoder(
     fields={
             # a file upload field
@@ -133,3 +134,4 @@ response = requests.post(send_url, data=multipart_data, headers={'Content-Type':
 
 - [1] https://cloud.google.com/about/locations/?region=asia-pacific#region
 - [2] https://cloud.google.com/appengine/docs/standard/go/mail/#who_can_send_mail
+- [3] https://cloud.google.com/appengine/docs/standard/python/how-requests-are-routed#gcloud_1
