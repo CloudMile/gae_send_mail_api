@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"google.golang.org/appengine/log"
-	"google.golang.org/appengine/mail"
+	"google.golang.org/appengine/v2/log"
+	"google.golang.org/appengine/v2/mail"
 )
 
 // GaeMail store the mail infos

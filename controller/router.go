@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"google.golang.org/appengine"
+	"google.golang.org/appengine/v2"
 )
 
 // Router is router list
