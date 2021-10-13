@@ -6,7 +6,7 @@ import (
 	"mime/multipart"
 	"strconv"
 
-	"google.golang.org/appengine/mail"
+	"google.golang.org/appengine/v2/mail"
 )
 
 // MaxFileSize is Attachment max size (MB)
@@ -37,7 +37,7 @@ func (u *UploadToAttachment) Change() (err error) {
 
 		// Alert the user if there as error reading the file
 		if readErr != nil && readErr.Error() != `EOF` {
-			err = errors.New(`Error to read file`)
+			err = errors.New("error to read file")
 			return
 		}
 

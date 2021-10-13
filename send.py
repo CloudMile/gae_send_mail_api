@@ -8,7 +8,7 @@ multipart_data = MultipartEncoder(
             # a file upload field
             'data': ('favicon.png', open('./static/favicon.png', 'rb'), 'text/plain'),
             # plain text fields
-            'to': 'to.mail@mile.cloud',
+            'to': 'to.mail@any-mail.com',
             'subject': 'Send Mail for Test from python',
             'body': 'TESTTESTTESTTESTTESTTESTTEST',
             }

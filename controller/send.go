@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/CloudMile/gae_send_mail_api/model"
-	"google.golang.org/appengine/log"
-	"google.golang.org/appengine/mail"
+	"google.golang.org/appengine/v2/log"
+	"google.golang.org/appengine/v2/mail"
 )
 
 // HeaderContentType is what Content-Type this API use
@@ -150,7 +150,6 @@ func ErrorResponse(w http.ResponseWriter, r *http.Request, httpStatus int, err e
 	log.Errorf(r.Context(), "Error is %s", err)
 	w.WriteHeader(httpStatus)
 	fmt.Fprintf(w, "%s", `{"error": "`+errorMessage+`"}`)
-	return
 }
 
 func checkContentType(ctx context.Context, contentType string) (reContentType string, pass, isDataUpload bool) {
