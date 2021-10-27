@@ -69,9 +69,9 @@ $ make deploy PROJECT_ID='<YOUR_PROJECT_ID>' FROM='mail@<YOUR_PROJECT_ID>.appspo
 cURL with multipart/form-data
 ```shell
 $ curl -X POST \
--F "to=to.mail@mile.cloud" \
--F "cc=cc1.mail@mile.cloud,cc2.mail@mile.cloud" \
--F "bcc=bcc1.mail@mile.cloud,bcc2.mail@mile.cloud" \
+-F "to=to.mail@any-mail.com" \
+-F "cc=cc1.mail@any-mail.com,cc2.mail@any-mail.com" \
+-F "bcc=bcc1.mail@any-mail.com,bcc2.mail@any-mail.com" \
 -F "subject=Send mail from GAE" \
 -F "data=@./favicon.png" \
 -F "body=upload file" \
@@ -81,12 +81,12 @@ $ curl -X POST \
 
 cURL with application/x-www-form-urlencoded
 ```shell
-$ curl -X POST -d 'to=to.mail@mile.cloud&subject=Send mail from GAE' "https://mail-dot-<YOUR_PROJECT_ID>.<REGION_ID>.r.appspot.com/send"
+$ curl -X POST -d 'to=to.mail@any-mail.com&subject=Send mail from GAE' "https://mail-dot-<YOUR_PROJECT_ID>.<REGION_ID>.r.appspot.com/send"
 ```
 
 cURL with application/json
 ```shell
-$ curl -X POST -H 'Content-Type: application/json' -d '{"to": "to.mail@mile.cloud", "subject": "Send mail from GAE"}' "https://mail-dot-<YOUR_PROJECT_ID>.<REGION_ID>.r.appspot.com/send"
+$ curl -X POST -H 'Content-Type: application/json' -d '{"to": "to.mail@any-mail.com", "subject": "Send mail from GAE"}' "https://mail-dot-<YOUR_PROJECT_ID>.<REGION_ID>.r.appspot.com/send"
 ```
 
 使用 ruby
@@ -99,7 +99,7 @@ require 'rest-client'
 send_url = 'https://mail-dot-<YOUR_PROJECT_ID>.<REGION_ID>.r.appspot.com/send'
 file = File.open('./static/favicon.png')
 params = {
-  to: 'to.mail@mile.cloud',
+  to: 'to.mail@any-mail.com',
   subject: 'Send Mail for Test',
   body: 'TESTTESTTESTTESTTESTTESTTEST',
   data: file
@@ -122,7 +122,7 @@ multipart_data = MultipartEncoder(
             # a file upload field
             'data': ('favicon.png', open('./static/favicon.png', 'rb'), 'text/plain'),
             # plain text fields
-            'to': 'to.mail@mile.cloud',
+            'to': 'to.mail@any-mail.com',
             'subject': 'Send Mail for Test',
             'body': 'TESTTESTTESTTESTTESTTESTTEST',
             }

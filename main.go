@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/CloudMile/gae_send_mail_api/controller"
-	"google.golang.org/appengine"
+	"google.golang.org/appengine/v2"
 )
 
 func main() {

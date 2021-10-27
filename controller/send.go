@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/CloudMile/gae_send_mail_api/model"
-	"google.golang.org/appengine/log"
-	"google.golang.org/appengine/mail"
+	"google.golang.org/appengine/v2/log"
+	"google.golang.org/appengine/v2/mail"
 )
 
 // HeaderContentType is what Content-Type this API use
@@ -38,7 +38,7 @@ func Send(w http.ResponseWriter, r *http.Request) {
 		ErrorResponse(w, r, http.StatusNonAuthoritativeInfo, nil, "Content-Type error, shoud be multipart/form-data, application/x-www-form-urlencoded or application/json")
 		return
 	}
-	form, err := MakeMailParams(r, contentType)
+	form, err := makeMailParams(r, contentType)
 	if err != nil {
 		ErrorResponse(w, r, http.StatusUnprocessableEntity, err, "parse form params error")
 		return
@@ -52,14 +52,14 @@ func Send(w http.ResponseWriter, r *http.Request) {
 
 	var attachments []mail.Attachment
 	if isDataUpload {
-		createdAttachments, err := CreateAttachments(r)
-		attachments = createdAttachments
+		attachments, err = createAttachments(r)
+
 		if err != nil {
 			ErrorResponse(w, r, http.StatusUnprocessableEntity, err, "upload file failed")
 		}
 	}
 
-	gaeMail := MakeGaeMail(ctx, &form, attachments)
+	gaeMail := makeGaeMail(ctx, &form, attachments)
 	sendErr := gaeMail.Send()
 	if sendErr != nil {
 		ErrorResponse(w, r, http.StatusUnprocessableEntity, sendErr, "send mail failed")
@@ -70,21 +70,21 @@ func Send(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", `{"result": "sent success"}`)
 }
 
-// CreateAttachments is create attachment from r.FormFile
-func CreateAttachments(r *http.Request) (attachments []mail.Attachment, err error) {
+// createAttachments is create attachment from r.FormFile
+func createAttachments(r *http.Request) (attachments []mail.Attachment, err error) {
 	file, header, err := r.FormFile("data")
 	if err != nil && err.Error() != `http: no such file` {
 		return
 	}
-	attachments, err = MakeAttachments(r, file, header)
+	attachments, err = makeAttachments(r, file, header)
 	if err != nil {
 		return
 	}
 	return
 }
 
-// MakeAttachments is using model UploadToAttachment to create attachment
-func MakeAttachments(r *http.Request, file multipart.File, header *multipart.FileHeader) (attachments []mail.Attachment, err error) {
+// makeAttachments is using model UploadToAttachment to create attachment
+func makeAttachments(r *http.Request, file multipart.File, header *multipart.FileHeader) (attachments []mail.Attachment, err error) {
 	attachments = make([]mail.Attachment, 0)
 
 	if file != nil {
@@ -102,8 +102,8 @@ func MakeAttachments(r *http.Request, file multipart.File, header *multipart.Fil
 	return
 }
 
-// MakeMailParams is make mail params
-func MakeMailParams(r *http.Request, contentType string) (form model.Form, err error) {
+// makeMailParams is make mail params
+func makeMailParams(r *http.Request, contentType string) (form model.Form, err error) {
 	switch contentType {
 	case "multipart/form-data":
 		form = model.Form{
@@ -128,8 +128,8 @@ func MakeMailParams(r *http.Request, contentType string) (form model.Form, err e
 	return
 }
 
-// MakeGaeMail is make model GaeMail
-func MakeGaeMail(ctx context.Context, form *model.Form, attachments []mail.Attachment) (gaeMail model.GaeMail) {
+// makeGaeMail is make model GaeMail
+func makeGaeMail(ctx context.Context, form *model.Form, attachments []mail.Attachment) (gaeMail model.GaeMail) {
 	gaeMail = model.GaeMail{
 		Ctx:     ctx,
 		To:      form.To,
@@ -150,7 +150,6 @@ func ErrorResponse(w http.ResponseWriter, r *http.Request, httpStatus int, err e
 	log.Errorf(r.Context(), "Error is %s", err)
 	w.WriteHeader(httpStatus)
 	fmt.Fprintf(w, "%s", `{"error": "`+errorMessage+`"}`)
-	return
 }
 
 func checkContentType(ctx context.Context, contentType string) (reContentType string, pass, isDataUpload bool) {
