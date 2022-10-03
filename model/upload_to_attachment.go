@@ -2,15 +2,17 @@ package model
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"mime/multipart"
+	"os"
 	"strconv"
 
 	"google.golang.org/appengine/v2/mail"
 )
 
 // MaxFileSize is Attachment max size (MB)
-const MaxFileSize = 10
+var MaxFileSize = os.Getenv("MAX_FILE_SIZE")
 
 // UploadToAttachment to change upload file to attachment
 type UploadToAttachment struct {
@@ -40,10 +42,9 @@ func (u *UploadToAttachment) Change() (err error) {
 			err = errors.New("error to read file")
 			return
 		}
-
-		if totalBytesRead > MaxFileSize*1024*1024 {
-			fileTooLargeMessage := u.UploadHeader.Filename + `: is larger than` + strconv.Itoa(MaxFileSize) + ` MB. Please resize then re-upload.`
-			err = errors.New(fileTooLargeMessage)
+		MaxFileSizeInt, _ := strconv.Atoi(MaxFileSize)
+		if totalBytesRead > MaxFileSizeInt*1024*1024 {
+			err = fmt.Errorf("%s is larger than %d MB please resize then re-upload", u.UploadHeader.Filename, MaxFileSizeInt)
 			return
 		}
 
