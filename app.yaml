@@ -27,6 +27,7 @@ automatic_scaling:
   max_pending_latency: automatic
 
 env_variables:
+  MAX_FILE_SIZE: 20
   MAIL_SENDER: "<YOUR_GAE_MAIL_SENDER>"
   # you can set up CUSTOM_TOKEN for enable auth check
   # if you enable, you need to add `curl -H 'Custom-Token: <YOUR_TOEKN>' `
